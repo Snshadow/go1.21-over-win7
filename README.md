@@ -3,7 +3,7 @@
 ## Make golang 1.21 or later run in Windows 7!
 ![Windows 7 run sample](https://i.imgur.com/3Q7S5Q7.png)
 
-- This project seeks to run golang 1.21 or later on Windows 7(which was dropped its support in golang 1.21), in a need of using golang compiled programs in Windows 7(in production envionments).
+- This repository seeks to run golang 1.21 or later on Windows 7(which was dropped its support in golang 1.21), in a need of using golang compiled programs in Windows 7(in production environments).
 
 __Tested using go1.22.5__ with test cases in src/cmd/internal/testdir in official golang repository.
 
@@ -23,7 +23,7 @@ The following two commits result in the panic in the image above.
 To handle these, [Microsoft Detours](https://github.com/microsoft/Detours) project(imported as submodule) is used to create DLL for hooking procedures that causes the panic.
 
 1. Just remove the LOAD_LIBRARY_SEARCH_SYSTEM32 flag from LoadLibraryEx call.
-2. Use BCryptGenRandom like this is a follow format to replace ProcessPrng(this may not ideal as BCryptGenRandom can return error unlike ProcessPrng).
+2. Use BCryptGenRandom like this in a following format to replace ProcessPrng(this may not ideal as BCryptGenRandom can return error unlike ProcessPrng).
 
 ```cpp
 (void)BCryptGenRandom(NULL, (PUCHAR)pbData, (ULONG)cbData, BCRYPT_USE_SYSTEM_PREFERRED_RNG);
@@ -99,3 +99,7 @@ int wmain()
 }
 ```
 and build it from Visual studio.
+
+## Special thanks
+
+Special thanks to [@mrexodia](https://github.com/mrexodia) for creating [x64dbg](https://github.com/x64dbg/x64dbg) project which helped me a lot with investigating the issue and other Windows program debugging!
