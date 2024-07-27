@@ -7,7 +7,7 @@
 #include <tchar.h>
 #include "detours.h"
 
-// image base of dll ifself
+// image base of dll itself
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
 HMODULE hKernel32 = GetModuleHandleW(_T("kernel32.dll"));

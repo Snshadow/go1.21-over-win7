@@ -38,7 +38,7 @@ To handle these, [Microsoft Detours](https://github.com/microsoft/Detours) proje
 
 - After installing Visual Studio, open __native tools command prompt for vs [your version]__ or __x64 native tools command prompt for vs [your version]__  from start menu according to the architecture that you want to build dll.
 - If haven't built Detours library before, run __nmake__ in the opened command prompt after navigating into __Detours/src__ directory. This should be done separately for x86 and x64 version in each command prompt to get the dll for each architecutre.
-- Navigate info go121+win7 directory and then run
+- Navigate into go121pluswin7 directory and then run
 
 ```cmd
 cl /LD /nologo /Zi /MT /Gm- /W4 /WX /we4777 /we4800 /Od /DDETOUR_DEBUG=0  /I ..\Detours\include\ /Fego121pluswin7.dll go121pluswin7.cpp  /link /release /incremental:no  /nodefaultlib:oldnames.lib /export:DetourFinishHelperProcess,@1,NONAME /export:HookedCreateProcessInternal  /export:HookedLoadLibraryEx  /export:HookedGetProcAddress ..\Detours\lib.X86\detours.lib kernel32.lib bcrypt.lib
