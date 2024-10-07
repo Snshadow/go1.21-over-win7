@@ -39,7 +39,7 @@ LPVOID write_into_process(HANDLE hProcess, LPBYTE buffer, SIZE_T buffer_size, DW
     }
     if (!WriteProcessMemory(hProcess, remoteAddress, buffer, buffer_size, NULL))
     {
-        VirtualFreeEx(hProcess, remoteAddress, buffer_size, MEM_FREE);
+        VirtualFreeEx(hProcess, remoteAddress, buffer_size, MEM_RELEASE);
         return NULL;
     }
     return remoteAddress;
@@ -85,7 +85,8 @@ BOOL WINAPI HookedCreateProcessInternal(
             return FALSE;
         }
 
-        LPVOID remote_text = write_into_process(lpProcessInformation->hProcess, (LPBYTE)dllpath, (wcslen((LPCWSTR)dllpath) + 1) * 2, PAGE_READWRITE);
+        SIZE_T cbText = (wcslen((LPCWSTR)dllpath) + 1) * 2;
+        LPVOID remote_text = write_into_process(lpProcessInformation->hProcess, (LPBYTE)dllpath, cbText, PAGE_READWRITE);
         if (remote_text == NULL)
             return FALSE;
 
@@ -96,6 +97,9 @@ BOOL WINAPI HookedCreateProcessInternal(
 
         // resume the main thread
         ResumeThread(lpProcessInformation->hThread);
+
+        // free dll name buffer
+        VirtualFreeEx(lpProcessInformation->hProcess, remote_text, cbText, MEM_RELEASE);
     }
     return res;
 }

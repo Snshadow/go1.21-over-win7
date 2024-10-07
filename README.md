@@ -1,11 +1,11 @@
 # go1.21-over-win7
 
 ## Make golang 1.21 or later run in Windows 7!
-![Windows 7 run sample](https://i.imgur.com/3Q7S5Q7.png)
+![Windows 7 run sample](./png/gotest-amd64.png)
 
 - This repository seeks to run golang 1.21 or later on Windows 7(which was dropped its support in golang 1.21), in a need of using golang compiled programs in Windows 7(in production environments).
 
-__Tested using go1.22.5__ with test cases in src/cmd/internal/testdir in official golang repository.
+__Tested using go1.23.2__ with test cases in src/cmd/internal/testdir in official golang repository.
 
 ### How does it work?
 
