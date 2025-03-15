@@ -1,11 +1,11 @@
 # go1.21-over-win7
 
 ## Make golang 1.21 or later run in Windows 7!
-![Windows 7 run sample](./png/gotest-amd64.png)
+![Windows 7 run sample](https://github.com/user-attachments/assets/978e0300-dbdc-49af-99f9-d9a1d420d437)
 
 - This repository seeks to run golang 1.21 or later on Windows 7(which was dropped its support in golang 1.21), in a need of using golang compiled programs in Windows 7(in production environments).
 
-__Tested using go1.23.2__ with test cases in src/cmd/internal/testdir in official golang repository.
+Tested using __go1.24.1__ with test cases in src/cmd/internal/testdir in official golang repository.
 
 ### How does it work?
 
@@ -36,27 +36,22 @@ To handle these, [Microsoft Detours](https://github.com/microsoft/Detours) proje
 
 ### How to build DLL
 
-- After installing Visual Studio, open __native tools command prompt for vs [your version]__ or __x64 native tools command prompt for vs [your version]__  from start menu according to the architecture that you want to build dll.
-- If haven't built Detours library before, run __nmake__ in the opened command prompt after navigating into __Detours/src__ directory. This should be done separately for x86 and x64 version in each command prompt to get the dll for each architecutre.
+#### Visual Studio
+
+- After installing Visual Studio, open __x86 native tools command prompt for vs [your version]__ or __x64 native tools command prompt for vs [your version]__  from start menu according to the architecture that you want to build dll.
 - Navigate into go121pluswin7 directory and then run
 
 ```cmd
-cl /LD /nologo /Zi /MT /Gm- /W4 /WX /we4777 /we4800 /Od /DDETOUR_DEBUG=0  /I ..\Detours\include\ /Fego121pluswin7.dll go121pluswin7.cpp  /link /release /incremental:no  /nodefaultlib:oldnames.lib /export:DetourFinishHelperProcess,@1,NONAME /export:HookedCreateProcessInternal  /export:HookedLoadLibraryEx  /export:HookedGetProcAddress ..\Detours\lib.X86\detours.lib kernel32.lib bcrypt.lib
+nmake
 ```
 
-for x86 architecture and
-
-```cmd
-cl /LD /nologo /Zi /MT /Gm- /W4 /WX /we4777 /we4800 /Od /DDETOUR_DEBUG=0  /I ..\Detours\include\ /Fego121pluswin7_64.dll go121pluswin7.cpp  /link /release /incremental:no  /nodefaultlib:oldnames.lib /export:DetourFinishHelperProcess,@1,NONAME  /export:HookedCreateProcessInternal /export:HookedLoadLibraryEx  /export:HookedGetProcAddress ..\Detours\lib.X64\detours.lib kernel32.lib bcrypt.lib
-```
-
-for x64 architecture in a command prompt opened eariler.
+, the go121pluswin7_(corresponding architecture).dll is to be created in the same directory.
 
 - Copy the compiled dll into a path that the program can look for dll(%PATH% or the directory that the program exists).
 
 (_Referenced from Makefile in [Simple sample](https://github.com/microsoft/Detours/wiki/SampleSimple) from Detours Project_)
 
-To inject this dll into a binary you can use setdll.exe from Detours Project after building sample binaries by running nmake in a Detours/samples directory in as mentioned above.
+To inject this dll into a binary you can use setdll.exe from Detours Project after building sample binaries by running `nmake` in a Detours/samples directory in as mentioned above.
 
 ### Inject into subprocesses for testing
 

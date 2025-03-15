@@ -1,0 +1,10 @@
+//  version information for go121pluswin7.dll
+
+#include "detver.h"
+
+#define VER_INTERNALNAME_STR        "go121pluswin7"
+DETOURS_STRINGIFY(DETOURS_BITS)
+#define VER_ORIGINALFILENAME_STR    "go121pluswin7"
+DETOURS_STRINGIFY(DETOURS_BITS) ".dll"
+#define VER_FILEDESCRIPTION_STR     "Run go1.21+ compiled programs in Windows 7!"
+#define VER_COMPANYNAME_STR         "Snshadow"
