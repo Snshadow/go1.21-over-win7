@@ -7,6 +7,7 @@
 *.o
 *.obj
 *.pdb
+*.res
 
 # Precompiled Headers
 *.gch

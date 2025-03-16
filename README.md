@@ -15,12 +15,12 @@ The following two commits result in the panic in the image above.
 
 - https://github.com/golang/go/commit/a17d959debdb04cd550016a3501dd09d50cd62e7
   
-  This breaks in Windows 7 as an specific update(KB2533623) is required for LOAD_LIBRARY_SEARCH_SYSTEM32(0x800) flag to work.
+  This breaks in Windows 7 as a specific update(KB2533623) is required for LOAD_LIBRARY_SEARCH_SYSTEM32(0x800) flag to work.
 - https://github.com/golang/go/commit/693def151adff1af707d82d28f55dba81ceb08e1
 
   This breaks as ProcessPrng function does not exist in BCryptPrimitives.dll(the dll itself exists in Windows 7).
 
-To handle these, [Microsoft Detours](https://github.com/microsoft/Detours) project(imported as submodule) is used to create DLL for hooking procedures that causes the panic.
+To handle these, [Microsoft Detours](https://github.com/microsoft/Detours) project(imported as submodule) is used to create DLL for hooking procedures that cause the panic.
 
 1. Just remove the LOAD_LIBRARY_SEARCH_SYSTEM32 flag from LoadLibraryEx call.
 2. Use BCryptGenRandom like this in a following format to replace ProcessPrng(this may not ideal as BCryptGenRandom can return error unlike ProcessPrng).
@@ -31,15 +31,19 @@ To handle these, [Microsoft Detours](https://github.com/microsoft/Detours) proje
 
 ### Requirements to build
 
-- Visual Studio 2017 or later
+- [Visual Studio](https://visualstudio.microsoft.com) 2017 or later
 - [Windows SDK](https://developer.microsoft.com/en-us/windows/downloads/windows-sdk)
+
+ or
+
+- [mingw-w64](https://www.mingw-w64.org) toolchain
 
 ### How to build DLL
 
 #### Visual Studio
 
 - After installing Visual Studio, open __x86 native tools command prompt for vs [your version]__ or __x64 native tools command prompt for vs [your version]__  from start menu according to the architecture that you want to build dll.
-- Navigate into go121pluswin7 directory and then run
+- Navigate into `go121pluswin7/msvc` directory and then run
 
 ```cmd
 nmake
@@ -52,6 +56,14 @@ nmake
 (_Referenced from Makefile in [Simple sample](https://github.com/microsoft/Detours/wiki/SampleSimple) from Detours Project_)
 
 To inject this dll into a binary you can use setdll.exe from Detours Project after building sample binaries by running `nmake` in a Detours/samples directory in as mentioned above.
+
+#### mingw
+
+[Mingw-w64](https://www.mingw-w64.org) can also be used to build dll.
+
+- TBD
+
+- Install mingw-w64 toolchain for Windows (see [here](https://www.mingw-w64.org/downloads)).
 
 ### Inject into subprocesses for testing
 
